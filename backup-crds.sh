@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -auexo pipefail
+set -aueo pipefail
 
 CRDS=$(kubectl get CustomResourceDefinitions --no-headers | awk -F'.' '{print $1}' | grep -v 'kube-')
 NSS=$(kubectl get namespaces --no-headers | awk '{print $1}')
@@ -8,7 +8,7 @@ DIR="./crd_backup"
 
 mkdir -p $DIR
 
-echo -e "All CRDs are going to be in ${DIR}"
+echo -e "All SMI CRDs are going to be in ${DIR}"
 
 for crd in $CRDS; do
     for ns in $NSS; do
@@ -25,3 +25,6 @@ done
 
 # There are a bunch of empty YAML files - remove them
 find . -size -84c -name '*.yaml' -delete
+
+echo -e "\n\nAll SMI CRDs are backed up in ${DIR}\n\n"
+ls -lah "$DIR"
